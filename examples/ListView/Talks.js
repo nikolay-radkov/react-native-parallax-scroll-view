@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableHighlight
 } from 'react-native';
 
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
@@ -17,6 +18,7 @@ import ParallaxScrollView from 'react-native-parallax-scroll-view';
 class Talks extends Component {
   constructor(props) {
     super(props);
+
     this.state =  {
       dataSource: new ListView.DataSource({
         rowHasChanged: (r1, r2) => r1 !== r2
@@ -34,6 +36,43 @@ class Talks extends Component {
         'Value of Values'
       ])
     };
+  }
+
+ _renderFab() {
+    const fabHeight = 60;
+    const fabRight = true;
+    const fabHorizontalOffset = 15;
+    const onPress = () => alert('Pressed');
+    const topOffset = PARALLAX_HEADER_HEIGHT - fabHeight / 2 -1;
+    const fabStyles = StyleSheet.create({
+      fab: {
+        position: 'absolute',
+        top: topOffset,
+        height: fabHeight,
+        width: fabHeight,
+        backgroundColor: 'green',
+        borderRadius: fabHeight,
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 5
+      },
+      fabLeft: {
+        left: fabHorizontalOffset
+      },
+      fabRight: {
+        right: fabHorizontalOffset
+      },
+      icon: {
+        fontSize: 30,
+        color: 'white'
+      }
+    })
+    return (
+      <TouchableHighlight onPress={onPress} style={[fabStyles.fab, fabRight && fabStyles.fabRight, !fabRight && fabStyles.fabLeft]}>
+        <Text style={fabStyles.icon}>+</Text>
+      </TouchableHighlight>
+    );
   }
 
   render() {
@@ -58,7 +97,7 @@ class Talks extends Component {
             stickyHeaderHeight={ STICKY_HEADER_HEIGHT }
             parallaxHeaderHeight={ PARALLAX_HEADER_HEIGHT }
             backgroundSpeed={10}
-
+            renderFab={this._renderFab}
             renderBackground={() => (
               <View key="background">
                 <Image source={{uri: 'https://i.ytimg.com/vi/P-NZei5ANaQ/maxresdefault.jpg',
